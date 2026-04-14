@@ -180,7 +180,7 @@ def list_available_models() -> list[str]:
 
 
 def main():
-    """Example usage of the Ollama prompt functions."""
+    """Interactive prompt with user input."""
     
     # Check available models
     print("Available models:")
@@ -191,6 +191,50 @@ def main():
     if not models:
         print("No models found. Make sure Ollama is running and has models installed.")
         return
+
+    print("\n" + "=" * 60)
+    print("Ollama Chat Interface")
+    print("=" * 60)
+    print("Type 'exit' to quit, 'help' for options\n")
+
+    while True:
+        try:
+            # Get user input
+            user_input = input("You: ").strip()
+            
+            if not user_input:
+                continue
+            
+            if user_input.lower() == "exit":
+                print("Goodbye!")
+                break
+            
+            if user_input.lower() == "help":
+                print("\nCommands:")
+                print("  exit          - Exit the chat")
+                print("  help          - Show this help message")
+                print("  stream on     - Enable streaming responses")
+                print("  stream off    - Disable streaming responses\n")
+                continue
+            
+            if user_input.lower() == "stream on":
+                print("Streaming enabled\n")
+                continue
+            
+            if user_input.lower() == "stream off":
+                print("Streaming disabled\n")
+                continue
+            
+            # Send prompt to Ollama
+            print("\nAI: ", end="")
+            response = prompt_ollama_chat([{"role": "user", "content": user_input}], stream=True)
+            print()
+        
+        except KeyboardInterrupt:
+            print("\n\nGoodbye!")
+            break
+        except Exception as e:
+            print(f"Error: {e}", file=sys.stderr)
 
     # Example 1: Simple prompt
     # print("\n=== Simple Prompt Example ===")
